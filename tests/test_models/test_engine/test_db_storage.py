@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 """
-Contains the TestDBStorageDocs and TestDBStorage classes
+Contains the Unnittest for AirBnb.
 """
-
 from datetime import datetime
 import inspect
 import models
@@ -86,3 +85,35 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def setUp(self):
+        """Set up for the tests"""
+        self.store = DBStorage()
+        self.state = State()
+        self.state.save()
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get retrieves the correct object"""
+        retrieved = self.store.get(State, self.state.id)
+        self.assertEqual(self.state, retrieved)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_non_existent(self):
+        """Test that get returns None when no object is found"""
+        self.assertIs(self.store.get(State, "1234"), None)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test that count returns the correct count"""
+        count = self.store.count(State)
+        self.assertEqual(count, 1)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_no_class(self):
+        """Test that count returns the correct count of all objects"""
+        overall_count = self.store.count()
+        self.assertEqual(overall_count, len(self.store.all()))
