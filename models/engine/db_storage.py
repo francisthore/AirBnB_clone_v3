@@ -4,6 +4,7 @@ Contains the class DBStorage
 """
 
 import models
+import os
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
@@ -11,7 +12,6 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-from os import getenv
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -26,18 +26,14 @@ class DBStorage:
     __session = None
 
     def __init__(self):
-        """Instantiate a DBStorage object"""
-        HBNB_MYSQL_USER = getenv('HBNB_MYSQL_USER')
-        HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
-        HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
-        HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
-        HBNB_ENV = getenv('HBNB_ENV')
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(HBNB_MYSQL_USER,
-                                             HBNB_MYSQL_PWD,
-                                             HBNB_MYSQL_HOST,
-                                             HBNB_MYSQL_DB))
-        if HBNB_ENV == "test":
+        """ creates the engine self.__engine """
+        self.__engine = create_engine(
+            'mysql+mysqldb://{}:{}@{}/{}'.format(
+                os.environ.get('HBNB_MYSQL_USER'),
+                os.environ.get('HBNB_MYSQL_PWD'),
+                os.environ.get('HBNB_MYSQL_HOST'),
+                os.environ.get('HBNB_MYSQL_DB')))
+        if os.environ.get("HBNB_ENV") == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
@@ -74,3 +70,29 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+    def get(self, cls, id):
+        """
+        Retrieve one object of a class.
+        cls: class
+        id: string representing the object ID
+        Returns the object based on the class and its ID, or None if not found
+        """
+        if cls.__name__ in classes:
+            all_objs = self.all(cls)
+            for obj in all_objs.values():
+                if obj.id == id:
+                    return obj
+        return None
+
+    def count(self, cls=None):
+        """
+        Count the number of objects in storage.
+        cls: class (optional)
+        Returns the number of objects in storage matching the given class.
+        If no class is passed, returns the count of all objects in storage.
+        """
+        if cls is None:
+            return len(self.all())
+        else:
+            return len(self.all(cls))
