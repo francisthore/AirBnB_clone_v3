@@ -6,7 +6,7 @@ from api.v1.views import app_views
 from flask import jsonify
 from models import storage
 
-# Define route for checking server status
+
 @app_views.route("/status", methods=['GET'], strict_slashes=False)
 def status():
     """
@@ -21,6 +21,7 @@ def status():
     resp.status_code = 200
 
     return resp
+
 
 @app_views.route("/stats", methods=['GET'], strict_slashes=False)
 def stats():
