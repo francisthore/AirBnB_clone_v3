@@ -120,7 +120,7 @@ class TestFileStorage(unittest.TestCase):
         storage = FileStorage()
         new_obj = State()  # replace with your actual class
         new_obj.save()
-        retrieved_obj = storage.get(State, new_obj.id)  # replace with your actual class
+        retrieved_obj = storage.get(State, new_obj.id)
         self.assertEqual(new_obj, retrieved_obj)
 
     @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
