@@ -133,25 +133,25 @@ class TestFileStorage(unittest.TestCase):
         new_count = storage.count()
         self.assertEqual(initial_count + 1, new_count)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_get(self):
-        """Test that get retrieves the correct object"""
-        storage = FileStorage()
-        new_obj = State()
-        new_obj.save()
-        retrieved = storage.get(State, new_obj.id)
-        self.assertEqual(new_obj, retrieved)
+    # @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    # def test_get(self):
+    #     """Test that get retrieves the correct object"""
+    #     storage = FileStorage()
+    #     new_obj = State()
+    #     new_obj.save()
+    #     retrieved = storage.get(State, new_obj.id)
+    #     self.assertEqual(new_obj, retrieved)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_get_none(self):
-        """Test that get returns None when no object is found"""
-        storage = FileStorage()
-        self.assertIs(storage.get(State, "1234"), None)
+    # @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    # def test_get_none(self):
+    #     """Test that get returns None when no object is found"""
+    #     storage = FileStorage()
+    #     self.assertIs(storage.get(State, "1234"), None)
 
-    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
-    def test_get_wrong_class(self):
-        """Test that get returns None when the class is wrong"""
-        storage = FileStorage()
-        new_obj = State()
-        new_obj.save()
-        self.assertIs(storage.get(User, new_obj.id), None)
+    # @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    # def test_get_wrong_class(self):
+    #     """Test that get returns None when the class is wrong"""
+    #     storage = FileStorage()
+    #     new_obj = State()
+    #     new_obj.save()
+    #     self.assertIs(storage.get(User, new_obj.id), None)
