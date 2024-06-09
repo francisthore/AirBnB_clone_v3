@@ -21,7 +21,6 @@ def get_places(city_id):
     if city is None:
         abort(404)
     response = jsonify([place.to_dict() for place in city.places])
-    response.status_code = 200
 
     return response
 
@@ -34,7 +33,6 @@ def get_place(place_id):
     if place is None:
         abort(404)
     response = jsonify(place.to_dict())
-    response.status_code = 200
 
     return response
 
@@ -49,7 +47,6 @@ def delete_place(place_id):
     storage.delete(place)
     storage.save()
     response = jsonify({})
-    response.status_code = 200
 
     return response
 
@@ -74,10 +71,7 @@ def create_place(city_id):
     data['city_id'] = city.id
     new_place = Place(**data)
     new_place.save()
-    response = jsonify(new_place.to_dict())
-    response.status_code = 200
-
-    return response
+    return jsonify(new_place.to_dict()), 201
 
 
 @app_views.route('/places/<string:place_id>', methods=['PUT'],
@@ -96,6 +90,5 @@ def update_place(place_id):
             setattr(place, key, value)
     place.save()
     response = jsonify(place.to_dict())
-    response.status_code = 200
 
     return response
