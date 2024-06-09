@@ -23,10 +23,7 @@ def get_city_by_state(state_id):
     if state is None:
         abort(404)
     cities = [city.to_dict() for city in state.cities]
-    response = jsonify(cities)
-    response.status_code = 200
-
-    return response
+    return jsonify(cities)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
@@ -38,10 +35,7 @@ def find_city(city_id):
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
-    response = jsonify(city.to_dict())
-    response.status_code = 200
-
-    return response
+    return jsonify(city.to_dict())
 
 
 @app_views.route('/cities/<city_id>', methods=['DELETE'],
@@ -56,10 +50,7 @@ def delete_city(city_id):
         abort(404)
     storage.delete(city)
     storage.save()
-    response = jsonify({})
-    response.status_code = 200
-
-    return response
+    return jsonify({})
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'],
@@ -81,8 +72,7 @@ def create_city(state_id):
     data = {"state_id": state_id, "name": info['name']}
     new_city = City(**data)
     new_city.save()
-    response = jsonify(new_city.to_dict())
-    response.status_code = 200
+    return jsonify(new_city.to_dict()), 201
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
@@ -101,7 +91,5 @@ def update_city(city_id):
         if key not in ['id', 'state_id', 'created_at', 'updated_at']:
             setattr(city, key, value)
     city.save()
-    response = jsonify(city.to_dict())
-    response.status_code = 200
+    return jsonify(city.to_dict())
 
-    return response
