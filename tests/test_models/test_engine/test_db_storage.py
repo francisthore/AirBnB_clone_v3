@@ -118,3 +118,30 @@ class TestDBStorage(unittest.TestCase):
         """Test that count returns the correct count of all objects"""
         overall_count = self.store.count()
         self.assertEqual(overall_count, len(self.store.all()))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_non_existent(self):
+        """Test that count returns 0 for non-existent objects"""
+        count = self.store.count(Amenity)
+        self.assertEqual(count, 0)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_reset(self):
+        """Test that count resets after deletion"""
+        self.store.delete(self.state)
+        count = self.store.count(State)
+        self.assertEqual(count, 0)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_reset_no_class(self):
+        """Test that count resets after deletion of all objects"""
+        self.store.delete(self.state)
+        count = self.store.count()
+        self.assertEqual(count, 0)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_reset_non_existent(self):
+        """Test that count returns 0 for non-existent objects"""
+        self.store.delete(self.state)
+        count = self.store.count(Amenity)
+        self.assertEqual(count, 0)
