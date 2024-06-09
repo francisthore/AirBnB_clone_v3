@@ -5,6 +5,7 @@ Handles Review objects and operations
 from api.v1.views import app_views, storage
 from flask import abort, jsonify, request
 from models.review import Review
+from models.place import Place
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["GET"],
@@ -15,7 +16,7 @@ def reviews_by_place(place_id):
     Returns a JSON list of reviews
     """
     review_list = []
-    place_obj = storage.get("Place", str(place_id))
+    place_obj = storage.get(Review, str(place_id))
 
     if place_obj is None:
         abort(404)
@@ -36,7 +37,7 @@ def review_create(place_id):
     review_json = request.get_json(silent=True)
     if review_json is None:
         abort(400, 'Not a JSON')
-    if not storage.get("Place", place_id):
+    if not storage.get(Place, place_id):
         abort(404)
     if not storage.get("User", review_json["user_id"]):
         abort(404)
@@ -62,7 +63,7 @@ def review_by_id(review_id):
     Retrieves a review by its ID
     Returns the review object or an error
     """
-    fetched_obj = storage.get("Review", str(review_id))
+    fetched_obj = storage.get(Review, str(review_id))
 
     if fetched_obj is None:
         abort(404)
@@ -82,7 +83,7 @@ def review_put(review_id):
     if place_json is None:
         return jsonify({"error": "Not a JSON"}), 400
 
-    fetched_obj = storage.get("Review", str(review_id))
+    fetched_obj = storage.get(Review, str(review_id))
 
     if fetched_obj is None:
         return jsonify({"error": "Review not found"}), 404
