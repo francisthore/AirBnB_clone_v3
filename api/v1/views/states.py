@@ -16,14 +16,15 @@ def get_states():
     """
     Retrieves the list of all State objects
     """
-    states = [state.to_dict() for state in storage.all("State").values()]
+    states = [state.to_dict() for state in storage.all(State).values()]
     response = jsonify(states)
     response.status_code = 200
 
     return response
 
 
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<string:state_id>', methods=['GET'],
+                 strict_slashes=False)
 def get_state(state_id):
     """
     Retrieves a state object by id
@@ -37,7 +38,7 @@ def get_state(state_id):
     return response
 
 
-@app_views.route('/states/<state_id>', methods=['DELETE'],
+@app_views.route('/states/<string:state_id>', methods=['DELETE'],
                  strict_slashes=False)
 def delete_state(state_id):
     """
@@ -72,7 +73,8 @@ def create_state():
     return response
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'])
+@app_views.route('/states/<string:state_id>', methods=['PUT'],
+                 strict_slashes=False)
 def update_state(state_id):
     """Updates a state object"""
     state_id = escape(state_id)
