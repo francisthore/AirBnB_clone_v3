@@ -3,14 +3,14 @@
 This module handles all default RESTful API actions for the Review object.
 """
 from api.v1.views import app_views
-from flask import Flask, abort, jsonify, request
+from flask import  abort, jsonify, request
 from models import storage
 from models.place import Place
 from models.review import Review
 from models.user import User
 
 
-@app_views.route("/places/<place_id>/reviews", methods=['GET']
+@app_views.route("/places/<place_id>/reviews", methods=['GET'],
                  strict_slashes=False)
 def get_reviews(place_id):
     """
@@ -24,7 +24,7 @@ def get_reviews(place_id):
     return jsonify(reviews)
 
 
-@app_views.route("/reviews/<review_id>", methods=['GET']
+@app_views.route("/reviews/<review_id>", methods=['GET'],
                  strict_slashes=False)
 def get_review(review_id):
     """
@@ -37,7 +37,7 @@ def get_review(review_id):
     return jsonify(review.to_dict())
 
 
-@app_views.route("/reviews/<review_id>", methods=['DELETE']
+@app_views.route("/reviews/<review_id>", methods=['DELETE'],
                  strict_slashes=False)
 def delete_review(review_id):
     """
