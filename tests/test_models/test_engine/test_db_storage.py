@@ -118,3 +118,19 @@ class TestDBStorage(unittest.TestCase):
         """Test that count returns the correct count of all objects"""
         overall_count = self.store.count()
         self.assertEqual(overall_count, len(self.store.all()))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_none(self):
+        """Test that get returns None when no object is found"""
+        self.assertIs(self.store.get(State, "1234"), None)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test that get retrieves the correct object"""
+        retrieved = self.store.get(State, self.state.id)
+        self.assertEqual(self.state, retrieved)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_wrong_class(self):
+        """Test that get returns None when class doesn't match"""
+        self.assertIs(self.store.get(User, self.state.id), None)
