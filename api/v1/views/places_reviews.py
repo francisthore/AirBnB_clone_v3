@@ -3,7 +3,7 @@
 Handles Review objects and operations
 """
 from api.v1.views import app_views, storage
-from flask import abort, jsonify
+from flask import abort, jsonify, request
 from models.review import Review
 
 
