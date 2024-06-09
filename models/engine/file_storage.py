@@ -74,7 +74,7 @@ class FileStorage:
         if isinstance(cls, str):
             cls = classes.get(cls)
 
-        if cls in None or cls.__name__ not in classes:
+        if cls is None or cls.__name__ not in classes:
             return None
         all_objs = self.all(cls)
         for obj in all_objs.values():
