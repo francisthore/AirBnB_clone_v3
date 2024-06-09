@@ -5,7 +5,7 @@ resource in our api project
 """
 
 from api.v1.views import app_views
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 from markupsafe import escape
 from models import storage
 from models.state import State
@@ -17,8 +17,7 @@ def get_states():
     Retrieves the list of all State objects
     """
     states = [state.to_dict() for state in storage.all(State).values()]
-    response = jsonify(states)
-    response.status_code = 200
+    response = make_response(jsonify(states), 200)
 
     return response
 
@@ -32,8 +31,7 @@ def get_state(state_id):
     state = storage.get(State, escape(state_id))
     if state is None:
         abort(404)
-    response = jsonify(state.to_dict())
-    response.status_code = 200
+    response = make_response(jsonify(state.to_dict()), 200)
 
     return response
 
@@ -49,8 +47,7 @@ def delete_state(state_id):
         abort(404)
     storage.delete(state)
     storage.save()
-    response = jsonify({})
-    response.status_code = 200
+    response = make_response(jsonify({}), 200)
 
     return response
 
@@ -67,8 +64,7 @@ def create_state():
         abort(400, description='Missing name')
     new_state = State(**data)
     new_state.save()
-    response = jsonify(new_state.to_dict())
-    response.status_code = 201
+    response = make_response(jsonify(new_state.to_dict()), 201)
 
     return response
 
@@ -88,7 +84,6 @@ def update_state(state_id):
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
     state.save()
-    response = jsonify(state.to_dict())
-    response.status_code = 200
+    response = make_response(jsonify(state.to_dict()), 200)
 
     return response

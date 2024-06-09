@@ -2,7 +2,6 @@
 """
 This module handles all default RESTful API actions for the Review object.
 """
-
 from api.v1.views import app_views
 from flask import Flask, abort, jsonify, request
 from models import storage
