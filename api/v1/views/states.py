@@ -17,7 +17,7 @@ def get_states():
     Retrieves the list of all State objects
     """
     states = [state.to_dict() for state in storage.all(State).values()]
-    response = make_response(jsonify(states), 200)
+    response = make_response(jsonify(states))
 
     return response
 
@@ -31,7 +31,7 @@ def get_state(state_id):
     state = storage.get(State, escape(state_id))
     if state is None:
         abort(404)
-    response = make_response(jsonify(state.to_dict()), 200)
+    response = make_response(jsonify(state.to_dict()))
 
     return response
 
@@ -47,7 +47,7 @@ def delete_state(state_id):
         abort(404)
     storage.delete(state)
     storage.save()
-    response = make_response(jsonify({}), 200)
+    response = make_response(jsonify({}))
 
     return response
 
@@ -84,6 +84,4 @@ def update_state(state_id):
         if key not in ['id', 'created_at', 'updated_at']:
             setattr(state, key, value)
     state.save()
-    response = make_response(jsonify(state.to_dict()), 200)
-
-    return response
+    return make_response(jsonify(state.to_dict()))
