@@ -3,7 +3,7 @@
 This module handles all default RESTful API actions for the Review object.
 """
 from api.v1.views import app_views
-from flask import  abort, jsonify, request
+from flask import abort, jsonify, request
 from models import storage
 from models.place import Place
 from models.review import Review
@@ -100,7 +100,8 @@ def update_review(review_id):
     if not request.get_json():
         abort(400, description="Not a JSON")
     for key, value in request.get_json().items():
-        if key not in ['id', 'user_id', 'place_id', 'created_at', 'updated_at']:
+        if key not in ['id', 'user_id', 'place_id',
+                       'created_at', 'updated_at']:
             setattr(review, key, value)
     review.save()
     return jsonify(review.to_dict()), 200
